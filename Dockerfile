@@ -1,8 +1,6 @@
-FROM ruby:2.3.7
+FROM ruby:2.6.5
 
 RUN apt-get update -qq
-
-COPY geoblacklight geoblacklight
 
 # Install apt dependencies
 RUN apt-get install -y --no-install-recommends \
@@ -11,28 +9,40 @@ RUN apt-get install -y --no-install-recommends \
  git \
  unzip \
  nodejs \
+ npm \
  zlib1g-dev \
- libxslt-dev \
- mysql-client \
- sqlite3
+ libxslt-dev
 
-#CMD git clone git@github.com:geoblacklight/geoblacklight.git
+ USER root
+
+ # Install yarn
+
+#RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add 
+#RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+#RUN apt-get install yarn
+RUN npm install --global yarn
+RUN yarn --version
+#RUN yarn install --check-files
+
+RUN git clone https://github.com/jhu-sheridan-libraries/geoblacklight
 
 WORKDIR geoblacklight
 
-USER root
+RUN ls
 
-# install bundler
-RUN gem install bundler -v 2.0.2
+#install bundler
+RUN gem install bundler
 
-CMD ls geoblacklight
+#install gems / js 
+RUN bundle
+RUN yarn install 
 
-#install gems
-RUN bundle install
-RUN gem install execjs
-
-#install rails
-#RUN gem install rails
+#copy config files
+RUN cp .example.env.development .env.development  
+RUN cp .example.env.test .env.test  
+RUN cp config/database.yml.example config/database.yml
+RUN bin/rails db:migrate RAILS_ENV=development
+#RUN rm Gemfile.lock
   
 EXPOSE 3000
-CMD bundle exec rake engine_cart:server
+CMD bundle exec rails server
