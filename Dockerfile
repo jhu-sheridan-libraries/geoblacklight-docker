@@ -2,6 +2,8 @@ FROM ruby:2.6.5
 
 RUN apt-get update -qq
 
+COPY config config
+
 # Install apt dependencies
 RUN apt-get install -y --no-install-recommends \
  build-essential \
@@ -28,6 +30,11 @@ RUN git clone https://github.com/jhu-sheridan-libraries/geoblacklight
 COPY start.sh geoblacklight
 RUN chmod 755 geoblacklight/start.sh
 
+#copy config files
+RUN cp config/env.development geoblacklight/.env.development  
+RUN cp config/env.test geoblacklight/.env.test  
+RUN cp config/database.yml geoblacklight/config/database.yml
+
 WORKDIR geoblacklight
 
 RUN ls
@@ -39,10 +46,6 @@ RUN gem install bundler
 RUN bundle
 RUN yarn install 
 
-#copy config files
-RUN cp .example.env.development .env.development  
-RUN cp .example.env.test .env.test  
-RUN cp config/database.yml.example config/database.yml
 RUN bin/rails db:migrate RAILS_ENV=development
 #RUN rm Gemfile.lock
 

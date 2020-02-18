@@ -1,0 +1,10 @@
+version: '3'
+services:  
+  geoblacklight:
+    build: .
+    ports:
+      - "3000:3000"
+  solr:
+    image: "acornwe3/solr-test:v11"
+    ports:
+      - "8983:8983"
