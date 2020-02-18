@@ -25,6 +25,8 @@ RUN yarn --version
 #RUN yarn install --check-files
 
 RUN git clone https://github.com/jhu-sheridan-libraries/geoblacklight
+COPY start.sh geoblacklight
+RUN chmod 755 geoblacklight/start.sh
 
 WORKDIR geoblacklight
 
@@ -43,6 +45,11 @@ RUN cp .example.env.test .env.test
 RUN cp config/database.yml.example config/database.yml
 RUN bin/rails db:migrate RAILS_ENV=development
 #RUN rm Gemfile.lock
-  
+
+ENTRYPOINT ["./start.sh"]   
+
+#RUN bundle exec rails s -b 0.0.0.0
+#RUN bundle exec rake jhu:server
+#RUN bundle exec rake engine_cart:server
+
 EXPOSE 3000
-CMD bundle exec rails server
