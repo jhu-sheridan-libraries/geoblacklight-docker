@@ -13,18 +13,23 @@ RUN apt-get install -y --no-install-recommends \
  nodejs \
  npm \
  zlib1g-dev \
- libxslt-dev
+ libxslt-dev \
+ python3 \
+ python3-dev \
 
  USER root
 
  # Install yarn
-
 #RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add 
 #RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
 #RUN apt-get install yarn
 RUN npm install --global yarn
 RUN yarn --version
 #RUN yarn install --check-files
+
+RUN python3 -m pip install --upgrade pip
+RUN pip3 install pysolr
+RUN pip3 install json
 
 RUN git clone https://github.com/jhu-sheridan-libraries/geoblacklight
 COPY start.sh geoblacklight
@@ -34,6 +39,7 @@ RUN chmod 755 geoblacklight/start.sh
 RUN cp config/env.development geoblacklight/.env.development  
 RUN cp config/env.test geoblacklight/.env.test  
 RUN cp config/database.yml geoblacklight/config/database.yml
+RUN cp config/Gemfile geoblacklight/Gemfile
 
 WORKDIR geoblacklight
 
@@ -46,7 +52,7 @@ RUN gem install bundler
 RUN bundle
 RUN yarn install 
 
-RUN bin/rails db:migrate RAILS_ENV=development
+#RUN bin/rails db:migrate RAILS_ENV=development
 #RUN rm Gemfile.lock
 
 ENTRYPOINT ["./start.sh"]   

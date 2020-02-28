@@ -1,5 +1,21 @@
 version: '3'
 services:  
+  db:
+    image: postgres:12
+    restart: always
+    ports:
+        - 5432:5432
+    #networks: ['stack']
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=tester1
+      - POSTGRES_DB=geogm_development
+      - environment=dev
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8085:8080
   geoblacklight:
     build: .
     ports:
