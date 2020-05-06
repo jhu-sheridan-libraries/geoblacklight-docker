@@ -10,12 +10,13 @@ RUN apt-get install -y --no-install-recommends \
  curl libssl-dev \
  git \
  unzip \
- nodejs \
  npm \
  zlib1g-dev \
  libxslt-dev \
  python3 \
  python3-dev \
+ python3-setuptools \
+ python3-pip
 
  USER root
 
@@ -23,13 +24,13 @@ RUN apt-get install -y --no-install-recommends \
 #RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add 
 #RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
 #RUN apt-get install yarn
+RUN npm --version
 RUN npm install --global yarn
 RUN yarn --version
 #RUN yarn install --check-files
 
 RUN python3 -m pip install --upgrade pip
-RUN pip3 install pysolr
-RUN pip3 install json
+RUN pip install pysolr
 
 RUN git clone https://github.com/jhu-sheridan-libraries/geoblacklight
 COPY start.sh geoblacklight
