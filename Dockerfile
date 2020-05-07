@@ -16,7 +16,8 @@ RUN apt-get install -y --no-install-recommends \
  python3 \
  python3-dev \
  python3-setuptools \
- python3-pip
+ python3-pip \
+ gettext-base 
 
  USER root
 
@@ -37,9 +38,9 @@ COPY start.sh geoblacklight
 RUN chmod 755 geoblacklight/start.sh
 
 #copy config files
-RUN cp config/env.development geoblacklight/.env.development  
-RUN cp config/env.test geoblacklight/.env.test  
-RUN cp config/database.yml geoblacklight/config/database.yml
+RUN cp config/env.development.template geoblacklight/.env.development.template  
+RUN cp config/env.test.template geoblacklight/.env.test.template  
+RUN cp config/database.yml.template geoblacklight/config/database.yml.template
 RUN cp config/Gemfile geoblacklight/Gemfile
 
 WORKDIR geoblacklight
