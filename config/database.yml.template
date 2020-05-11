@@ -13,7 +13,7 @@ default: &default
 development:
   <<: *default
   database: geogm_development
-  host: db-$environment.geoblacklight-local #inject name 
+  host: geoblacklight-$environment-postgres.geoblacklight-local #inject name 
   username: postgres
   password: $password #inject password
 

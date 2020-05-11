@@ -1,6 +1,6 @@
 version: '3'
 services:  
-  db-dev.geoblacklight-local:
+  geoblacklight-dev-postgres.geoblacklight-local:
     image: postgres:12
     restart: always
     ports:
@@ -25,7 +25,7 @@ services:
       - password=tester1
       - database=geogm_development
       - environment=dev
-  solr-dev.geoblacklight-local:
+  geoblacklight-dev-solr.geoblacklight-local:
     image: "acornwe3/solr-test:v11"
     ports:
       - "8983:8983"
